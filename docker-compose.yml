@@ -1,0 +1,48 @@
+version: '3'
+services:
+  prometheus: 
+    build: ./prometheus/
+    volumes:
+      - prom-data:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.external-url=http://localhost/prometheus/'
+      - '--web.route-prefix=/'
+  grafana:
+    build: ./grafana/
+    volumes: 
+      - grafana-data:/var/lib/grafana grafana/grafana
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+    ports: 
+      - 3000:3000
+  nginx: 
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/localhost.crt:/etc/ssl/localhost.crt
+      - ./nginx/localhost.key:/etc/ssl/localhost.key
+      - ./nginx/html/:/usr/share/nginx/html/
+    ports:
+      - 80:80
+      - 443:443
+  oauth:
+    build: ./oauth/
+    command:
+      - '--http-address=0.0.0.0:4180'
+      - '--provider=azure'
+      - "--client-id=${OAUTH_CLIENT_ID}"
+      - "--client-secret=${OAUTH_CLIENT_SECRET}"
+      - "--azure-tenant=${OAUTH_TENANT_ID}"
+      - '--email-domain=*'
+      - '--cookie-secret=sadfwerasdfljmnwerklsadfksadfsaf'
+      - '--cookie-secure=true'
+      - '--cookie-expire=4h0m0s'
+      - '--cookie-domain=localhost'
+      - '--set-xauthrequest'
+    ports:
+      - 4180:4180
+
+volumes:
+  prom-data:
+  grafana-data:
