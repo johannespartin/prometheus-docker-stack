@@ -5,16 +5,14 @@ Authentication provider in this case is Azure AD.
 
 ## Components
 
-NGINX
-OAUTH2 Proxy
-Prometheus
-Grafana
+- NGINX
+- OAUTH2 Proxy
+- Prometheus
+- Grafana
 
 ## Setup
 
-Docker + Docker Compose
-
 Environment variables:
-OAUTH_CLIENT_ID
-OAUTH_CLIENT_SECRET
-OAUTH_TENANT_ID
+- OAUTH_CLIENT_ID
+- OAUTH_CLIENT_SECRET
+- OAUTH_TENANT_ID
