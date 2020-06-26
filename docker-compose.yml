@@ -28,6 +28,8 @@ services:
       - 443:443
   oauth:
     build: ./oauth/
+    volumes: 
+      - ./oauth/html/:/var/html/
     command:
       - '--http-address=0.0.0.0:4180'
       - '--provider=azure'
@@ -40,6 +42,7 @@ services:
       - '--cookie-expire=4h0m0s'
       - '--cookie-domain=localhost'
       - '--set-xauthrequest'
+      - '--custom-templates-dir=/var/html'
     ports:
       - 4180:4180
 
